@@ -50,6 +50,13 @@ async function run(){
             res.send(product);
         })
 
+        // api single product insert routes
+        app.post('/product', async (req, res) => {
+            const newProduct = req.body;
+            const result = await productCollection.insertOne(newProduct);
+            res.send(result);
+        })
+
     }finally{
 
     }
