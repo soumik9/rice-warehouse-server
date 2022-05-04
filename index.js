@@ -57,6 +57,23 @@ async function run(){
             res.send(result);
         })
 
+        // api product stock routes
+        app.put('/product/:productId', async (req, res) => {
+            const id = req.params.productId;
+            const updateProduct = req.body;
+            const filter = {_id: ObjectId(id)};
+            const options = { upsert: true};
+
+            const updatedDoc = {
+                $set: {
+                    quantity: parseInt(quantity) + updateProduct.stock,
+                }
+            }
+
+            const result = await productCollection.updateOne(filter, updatedDoc, options);
+            res.send(result);
+        })
+
     }finally{
 
     }
