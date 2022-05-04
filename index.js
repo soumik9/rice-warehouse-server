@@ -29,12 +29,12 @@ async function run(){
         const productCollection = client.db("riceWareHouse").collection("products");
         
         
-        // api home routes
+        // api homepage
         app.get('/' , (req, res) => {
             res.send('Rice Warehouse Server Is Ready')
         })
 
-        // api all products routes
+        // api get all products
         app.get('/products', async (req, res) => {
             const query = {};
             const cursor = productCollection.find(query);
@@ -42,7 +42,7 @@ async function run(){
             res.send(products);
         })
 
-        // api single product routes
+        // api get single product 
         app.get('/product/:productId', async (req, res) => {
             const id = req.params.productId;
             const query = {_id: ObjectId(id)};
@@ -50,14 +50,14 @@ async function run(){
             res.send(product);
         })
 
-        // api single product insert routes
+        // api insert product 
         app.post('/product', async (req, res) => {
             const newProduct = req.body;
             const result = await productCollection.insertOne(newProduct);
             res.send(result);
         })
 
-        // api product stock routes
+        // api product stock
         app.put('/product/:productId', async (req, res) => {
             const id = req.params.productId;
             const updatedProduct = req.body;
@@ -85,6 +85,15 @@ async function run(){
                 res.send(result);
             }
         })
+
+        // api delete product
+        app.delete('/product/:productId', async (req, res) => {
+            const id = req.params.productId;
+            const query = {_id: ObjectId(id)};
+            const result = await productCollection.deleteOne(query);
+            res.send(result);
+        })
+
 
     }finally{
 
