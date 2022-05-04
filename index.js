@@ -61,23 +61,23 @@ async function run(){
         app.put('/product/:productId', async (req, res) => {
             const id = req.params.productId;
             const updateProduct = req.body;
-            const filter = {_id: ObjectId(id)};
+            const filter = { _id: ObjectId(id) };
             const options = { upsert: true};
 
-            // if(updateProduct.newQuantity && updateProduct.newSold){
-            //     const updatedDoc = {
-            //         $set: {
-            //             quantity: updateProduct.newQuantity,
-            //             sold: updateProduct.newSold,
-            //         }
-            //     }
-            // }else{
+            if(updateProduct.newQuantity && updateProduct.newSold){
+                const updatedDoc = {
+                    $set: {
+                        quantity: updateProduct.newQuantity,
+                        sold: updateProduct.newSold,
+                    }
+                }
+            }else{
                 const updatedDoc = {
                     $set: {
                         quantity: updateProduct.newQuantity,
                     }
                 }
-            // }
+            }
 
             const result = await productCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
