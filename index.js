@@ -66,7 +66,8 @@ async function run(){
 
             const updatedDoc = {
                 $set: {
-                    quantity: parseInt(quantity) + parseInt(updateProduct.stock),
+                    // quantity: parseInt(quantity) + parseInt(updateProduct.stock),
+                    quantity: quantity + updateProduct.stock,
                 }
             }
 
