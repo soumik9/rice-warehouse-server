@@ -64,9 +64,18 @@ async function run(){
             const filter = {_id: ObjectId(id)};
             const options = { upsert: true};
 
-            const updatedDoc = {
-                $set: {
-                    quantity: updateProduct.newQuantity,
+            if(updateProduct.newQuantity && updateProduct.newSold){
+                const updatedDoc = {
+                    $set: {
+                        quantity: updateProduct.newQuantity,
+                        sold: updateProduct.newSold,
+                    }
+                }
+            }else{
+                const updatedDoc = {
+                    $set: {
+                        quantity: updateProduct.newQuantity,
+                    }
                 }
             }
 
