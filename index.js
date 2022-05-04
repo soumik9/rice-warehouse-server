@@ -57,7 +57,7 @@ async function run(){
             res.send(result);
         })
 
-        // api product stock routes update
+        // api product stock routes
         app.put('/product/:productId', async (req, res) => {
             const id = req.params.productId;
             const updateProduct = req.body;
@@ -66,7 +66,7 @@ async function run(){
 
             const updatedDoc = {
                 $set: {
-                    ...updateProduct
+                    quantity: updateProduct.newQuantity,
                 }
             }
 
