@@ -60,27 +60,30 @@ async function run(){
         // api product stock routes
         app.put('/product/:productId', async (req, res) => {
             const id = req.params.productId;
-            const updateProduct = req.body;
+            const updatedProduct = req.body;
             const filter = { _id: ObjectId(id) };
             const options = { upsert: true};
 
-            if(updateProduct.newQuantity && updateProduct.newSold){
+            if(updatedProduct.newQuantity && updatedProduct.newSold){
                 const updatedDoc = {
                     $set: {
-                        quantity: updateProduct.newQuantity,
-                        sold: updateProduct.newSold,
+                        quantity: updatedProduct.newQuantity,
+                        sold: updatedProduct.newSold,
                     }
                 }
+
+                const result = await productCollection.updateOne(filter, updatedDoc, options);
+                res.send(result);
             }else{
                 const updatedDoc = {
                     $set: {
-                        quantity: updateProduct.newQuantity,
+                        quantity: updatedProduct.newQuantity,
                     }
                 }
-            }
 
-            const result = await productCollection.updateOne(filter, updatedDoc, options);
-            res.send(result);
+                const result = await productCollection.updateOne(filter, updatedDoc, options);
+                res.send(result);
+            }
         })
 
     }finally{
