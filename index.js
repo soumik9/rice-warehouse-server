@@ -34,11 +34,21 @@ async function run(){
             res.send('Rice Warehouse Server Is Ready')
         })
 
-        // api get all products
+        // api get all products and filter by page and pagination
         app.get('/products', async (req, res) => {
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+
             const query = {};
+            let products;
             const cursor = productCollection.find(query);
-            const products = await cursor.toArray();
+
+            if(page || size){
+                products = await cursor.skip(page*size).limit(size).toArray();
+            }else{
+                products = await cursor.toArray();
+            }
+
             res.send(products);
         })
 
@@ -97,10 +107,16 @@ async function run(){
         // my products
         app.get('/my-products', async (req, res) => {
             const email = req.query.email;
-            const query = { email: email};
+            const query = { email: email };
             const cursor = productCollection.find(query);
             const myProducts = await cursor.toArray();
             res.send(myProducts);
+        })
+
+        // products count
+        app.get('/products-count', async (req, res) => {
+            const count = await productCollection.estimatedDocumentCount();
+            res.send({ count });
         })
 
 
