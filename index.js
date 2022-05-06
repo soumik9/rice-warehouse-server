@@ -12,11 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-/* 
-    user - soumik9
-    pass - TbBiOyMXtt439fF2
-*/
-
+// jwt verification
 function verifyJWT(req, res, next){
     const authHeader = req.headers.authorization;
 
@@ -38,7 +34,6 @@ function verifyJWT(req, res, next){
 
 // connect to mongo
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@ricewarehouse.3kpcy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
 
@@ -135,13 +130,13 @@ async function run(){
         app.get('/my-products', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
-
             if(email === decodedEmail){
                 const query = { email: email };
                 const cursor = productCollection.find(query);
                 const myProducts = await cursor.toArray();
                 res.send(myProducts);
             }else{
+                console.log('error found');
                 res.status(403).send({ message: 'forbidden access' });
             }
         })
@@ -151,16 +146,12 @@ async function run(){
             const count = await productCollection.estimatedDocumentCount();
             res.send({ count });
         })
-
-
     }finally{
 
     }
 }
 
 run().catch(console.dir);
-
-
 
 // port listening
 app.listen(port, () => {
