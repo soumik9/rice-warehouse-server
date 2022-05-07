@@ -15,7 +15,7 @@ app.use(express.json());
 // jwt verification
 function verifyJWT(req, res, next){
     const authHeader = req.headers.authorization;
-
+   
     if(!authHeader){
         return res.status(401).send({message: 'Unauthorized access'});
     }
@@ -130,13 +130,13 @@ async function run(){
         app.get('/my-products', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
             const email = req.query.email;
+
             if(email === decodedEmail){
                 const query = { email: email };
                 const cursor = productCollection.find(query);
                 const myProducts = await cursor.toArray();
                 res.send(myProducts);
             }else{
-                console.log('error found');
                 res.status(403).send({ message: 'forbidden access' });
             }
         })
