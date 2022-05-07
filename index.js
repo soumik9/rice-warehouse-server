@@ -43,6 +43,7 @@ async function run(){
         // connect to mongodb collection
         await client.connect();
         const productCollection = client.db("riceWareHouse").collection("products");
+        const reviewCollection = client.db("riceWareHouse").collection("reviews");
 
         // jwt token AUTH
         app.post('/login', async (req, res) => {
@@ -72,6 +73,16 @@ async function run(){
             }
 
             res.send(products);
+        })
+
+        // api get all reviews
+        app.get('/reviews', async (req, res) => {
+            const query = {};
+            const cursor = reviewCollection.find(query);
+            const reviews = await cursor.toArray();
+         
+
+            res.send(reviews);
         })
 
         // api get single product 
